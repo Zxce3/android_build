@@ -618,6 +618,8 @@ subdirs := \
 	frameworks/rs/cpp \
 	frameworks/compile/slang \
 	hardware \
+	libnativehelper \
+	libcore \
 	prebuilts/tools/linux-x86/sdl \
 	prebuilts/sdk/tools \
 	sdk/emulator \
