@@ -654,7 +654,8 @@ subdirs += \
 # Specific projects for Halium
 subdirs += \
 	halium/hybris-boot \
-	halium/droidmedia
+	halium/droidmedia \
+	halium/halium-boot
 
 FULL_BUILD := true
 
