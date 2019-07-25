@@ -167,7 +167,7 @@ TARGET_BUILD_JAVA_SUPPORT_LEVEL := platform
 
 # -----------------------------------------------------------------
 # The pdk (Platform Development Kit) build
-include build/core/pdk_config.mk
+#include build/core/pdk_config.mk
 
 #
 # -----------------------------------------------------------------
@@ -425,6 +425,15 @@ subdir_makefiles_total := $(words $(subdir_makefiles))
 .KATI_READONLY := subdir_makefiles_total
 
 $(foreach mk,$(subdir_makefiles),$(info [$(call inc_and_print,subdir_makefiles_inc)/$(subdir_makefiles_total)] including $(mk) ...)$(eval include $(mk)))
+
+HYBRIS_COMMON_TARGETS := bootimage hybris-updater-unpack hybris-recovery hybris-boot servicemanager logcat updater init adb adbd linker libc libEGL libGLESv1_CM libGLESv2
+HYBRIS_COMMON_ANDROID8_TARGETS := verity_signer boot_signer e2fsdroid vendorimage ramdisk libselinux_stubs libsurfaceflinger libhwc2_compat_layer bootctl
+
+HYBRIS_COMMON_64_BIT_EXTRA_TARGETS = linker_32 libc_32 libEGL_32 libGLESv1_CM_32 libGLESv2_32 libhwc2_compat_layer_32
+HYBRIS_COMMON_TARGETS += $(HYBRIS_COMMON_ANDROID8_TARGETS)
+
+HYBRIS_TARGETS := $(HYBRIS_COMMON_TARGETS) $(HYBRIS_COMMON_64_BIT_EXTRA_TARGETS)
+
 
 ALL_MODULES := $(HYBRIS_TARGETS)
 ALL_LINK_TYPES := $(foreach r,$(ALL_MODULES),$(shell echo $(filter %:%:$(r),$(ALL_LINK_TYPES))))
