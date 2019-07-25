@@ -908,39 +908,39 @@ $(winpthreads_notice_file): \
 	$(hide) mkdir -p $(dir $@)
 	$(hide) $(ACP) $< $@
 
-# -----------------------------------------------------------------
-# Build a keystore with the authorized keys in it, used to verify the
-# authenticity of downloaded OTA packages.
+## -----------------------------------------------------------------
+## Build a keystore with the authorized keys in it, used to verify the
+## authenticity of downloaded OTA packages.
+##
+## This rule adds to ALL_DEFAULT_INSTALLED_MODULES, so it needs to come
+## before the rules that use that variable to build the image.
+#ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_ETC)/security/otacerts.zip
+#$(TARGET_OUT_ETC)/security/otacerts.zip: KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
+#$(TARGET_OUT_ETC)/security/otacerts.zip: $(addsuffix .x509.pem,$(DEFAULT_KEY_CERT_PAIR)) | $(ZIPTIME)
+#	$(hide) rm -f $@
+#	$(hide) mkdir -p $(dir $@)
+#	$(hide) zip -qjX $@ $<
+#	$(remove-timestamps-from-package)
 #
-# This rule adds to ALL_DEFAULT_INSTALLED_MODULES, so it needs to come
-# before the rules that use that variable to build the image.
-ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_ETC)/security/otacerts.zip
-$(TARGET_OUT_ETC)/security/otacerts.zip: KEY_CERT_PAIR := $(DEFAULT_KEY_CERT_PAIR)
-$(TARGET_OUT_ETC)/security/otacerts.zip: $(addsuffix .x509.pem,$(DEFAULT_KEY_CERT_PAIR)) | $(ZIPTIME)
-	$(hide) rm -f $@
-	$(hide) mkdir -p $(dir $@)
-	$(hide) zip -qjX $@ $<
-	$(remove-timestamps-from-package)
-
-# Carry the public key for update_engine if it's a non-IoT target that
-# uses the AB updater. We use the same key as otacerts but in RSA public key
-# format.
-ifeq ($(AB_OTA_UPDATER),true)
-ifneq ($(PRODUCT_IOT),true)
-ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem
-$(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem: $(addsuffix .x509.pem,$(DEFAULT_KEY_CERT_PAIR))
-	$(hide) rm -f $@
-	$(hide) mkdir -p $(dir $@)
-	$(hide) openssl x509 -pubkey -noout -in $< > $@
-
-ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_RECOVERY_ROOT_OUT)/etc/update_engine/update-payload-key.pub.pem
-$(TARGET_RECOVERY_ROOT_OUT)/etc/update_engine/update-payload-key.pub.pem: $(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem
-	$(hide) cp -f $< $@
-endif
-endif
-
-.PHONY: otacerts
-otacerts: $(TARGET_OUT_ETC)/security/otacerts.zip
+## Carry the public key for update_engine if it's a non-IoT target that
+## uses the AB updater. We use the same key as otacerts but in RSA public key
+## format.
+#ifeq ($(AB_OTA_UPDATER),true)
+#ifneq ($(PRODUCT_IOT),true)
+#ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem
+#$(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem: $(addsuffix .x509.pem,$(DEFAULT_KEY_CERT_PAIR))
+#	$(hide) rm -f $@
+#	$(hide) mkdir -p $(dir $@)
+#	$(hide) openssl x509 -pubkey -noout -in $< > $@
+#
+#ALL_DEFAULT_INSTALLED_MODULES += $(TARGET_RECOVERY_ROOT_OUT)/etc/update_engine/update-payload-key.pub.pem
+#$(TARGET_RECOVERY_ROOT_OUT)/etc/update_engine/update-payload-key.pub.pem: $(TARGET_OUT_ETC)/update_engine/update-payload-key.pub.pem
+#	$(hide) cp -f $< $@
+#endif
+#endif
+#
+#.PHONY: otacerts
+#otacerts: $(TARGET_OUT_ETC)/security/otacerts.zip
 
 
 # #################################################################
@@ -1219,16 +1219,16 @@ OTA_PUBLIC_KEYS := $(DEFAULT_SYSTEM_DEV_CERTIFICATE).x509.pem
 
 # Generate a file containing the keys that will be read by the
 # recovery binary.
-RECOVERY_INSTALL_OTA_KEYS := \
-	$(call intermediates-dir-for,PACKAGING,ota_keys)/keys
-DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
-$(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
-$(RECOVERY_INSTALL_OTA_KEYS): extra_keys := $(patsubst %,%.x509.pem,$(PRODUCT_EXTRA_RECOVERY_KEYS))
-$(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
-	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys)"
-	@rm -rf $@
-	@mkdir -p $(dir $@)
-	$(JAVA) -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
+#RECOVERY_INSTALL_OTA_KEYS := \
+#	$(call intermediates-dir-for,PACKAGING,ota_keys)/keys
+#DUMPKEY_JAR := $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar
+#$(RECOVERY_INSTALL_OTA_KEYS): PRIVATE_OTA_PUBLIC_KEYS := $(OTA_PUBLIC_KEYS)
+#$(RECOVERY_INSTALL_OTA_KEYS): extra_keys := $(patsubst %,%.x509.pem,$(PRODUCT_EXTRA_RECOVERY_KEYS))
+#$(RECOVERY_INSTALL_OTA_KEYS): $(OTA_PUBLIC_KEYS) $(DUMPKEY_JAR) $(extra_keys)
+#	@echo "DumpPublicKey: $@ <= $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys)"
+#	@rm -rf $@
+#	@mkdir -p $(dir $@)
+#	$(JAVA) -jar $(DUMPKEY_JAR) $(PRIVATE_OTA_PUBLIC_KEYS) $(extra_keys) > $@
 
 RECOVERYIMAGE_ID_FILE := $(PRODUCT_OUT)/recovery.id
 
@@ -1275,7 +1275,7 @@ define build-recoveryramdisk
     cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab;)
   $(if $(strip $(recovery_wipe)), \
     $(hide) cp -f $(recovery_wipe) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.wipe)
-  $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
+#  $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
   $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) \
           > $(TARGET_RECOVERY_ROOT_OUT)/prop.default
   $(if $(INSTALLED_VENDOR_DEFAULT_PROP_TARGET), \
@@ -1338,7 +1338,7 @@ $(INSTALLED_BOOTIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) $(ADBD) \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_props) $(recovery_resource_deps) \
 		$(recovery_fstab) \
-		$(RECOVERY_INSTALL_OTA_KEYS) \
+#		$(RECOVERY_INSTALL_OTA_KEYS) \
 		$(INSTALLED_VENDOR_DEFAULT_PROP_TARGET) \
 		$(BOARD_RECOVERY_KERNEL_MODULES) \
 		$(DEPMOD)
@@ -1356,7 +1356,7 @@ $(recovery_uncompressed_ramdisk): $(MKBOOTFS) $(ADBD) \
 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
 		$(recovery_build_props) $(recovery_resource_deps) $(recovery_root_deps) \
 		$(recovery_fstab) \
-		$(RECOVERY_INSTALL_OTA_KEYS) \
+#		$(RECOVERY_INSTALL_OTA_KEYS) \
 		$(INSTALLED_VENDOR_DEFAULT_PROP_TARGET) \
 		$(BOARD_RECOVERY_KERNEL_MODULES) \
 		$(DEPMOD)
@@ -2203,7 +2203,6 @@ OTATOOLS :=  $(HOST_OUT_EXECUTABLES)/minigzip \
   $(HOST_OUT_EXECUTABLES)/bsdiff \
   $(HOST_OUT_EXECUTABLES)/imgdiff \
   $(HOST_OUT_JAVA_LIBRARIES)/dumpkey.jar \
-  $(HOST_OUT_JAVA_LIBRARIES)/signapk.jar \
   $(HOST_OUT_JAVA_LIBRARIES)/BootSignature.jar \
   $(HOST_OUT_JAVA_LIBRARIES)/VeritySigner.jar \
   $(HOST_OUT_EXECUTABLES)/make_ext4fs \

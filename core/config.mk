@@ -702,26 +702,26 @@ COLUMN:= column
 # We may not have the right JAVA_HOME/PATH set up yet when this is run from envsetup.sh.
 ifneq ($(CALLED_FROM_SETUP),true)
 
-# Path to tools.jar, or empty if EXPERIMENTAL_USE_OPENJDK9 is set
-HOST_JDK_TOOLS_JAR :=
-# TODO: Remove HOST_JDK_TOOLS_JAR and all references to it once OpenJDK 8
-# toolchains are no longer supported (i.e. when what is now
-# EXPERIMENTAL_USE_OPENJDK9 becomes the standard). http://b/38418220
-ifeq ($(EXPERIMENTAL_USE_OPENJDK9),)
-HOST_JDK_TOOLS_JAR := $(shell $(BUILD_SYSTEM)/find-jdk-tools-jar.sh)
+## Path to tools.jar, or empty if EXPERIMENTAL_USE_OPENJDK9 is set
+#HOST_JDK_TOOLS_JAR :=
+## TODO: Remove HOST_JDK_TOOLS_JAR and all references to it once OpenJDK 8
+## toolchains are no longer supported (i.e. when what is now
+## EXPERIMENTAL_USE_OPENJDK9 becomes the standard). http://b/38418220
+#ifeq ($(EXPERIMENTAL_USE_OPENJDK9),)
+#HOST_JDK_TOOLS_JAR := $(shell $(BUILD_SYSTEM)/find-jdk-tools-jar.sh)
+#
+#ifneq ($(HOST_JDK_TOOLS_JAR),)
+#ifeq ($(wildcard $(HOST_JDK_TOOLS_JAR)),)
+#$(error Error: could not find jdk tools.jar at $(HOST_JDK_TOOLS_JAR), please check if your JDK was installed correctly)
+#endif
+#endif
+#endif # ifeq ($(EXPERIMENTAL_USE_OPENJDK9),)
 
-ifneq ($(HOST_JDK_TOOLS_JAR),)
-ifeq ($(wildcard $(HOST_JDK_TOOLS_JAR)),)
-$(error Error: could not find jdk tools.jar at $(HOST_JDK_TOOLS_JAR), please check if your JDK was installed correctly)
-endif
-endif
-endif # ifeq ($(EXPERIMENTAL_USE_OPENJDK9),)
-
-# Is the host JDK 64-bit version?
-HOST_JDK_IS_64BIT_VERSION :=
-ifneq ($(filter 64-Bit, $(shell $(JAVA) -version 2>&1)),)
-HOST_JDK_IS_64BIT_VERSION := true
-endif
+## Is the host JDK 64-bit version?
+#HOST_JDK_IS_64BIT_VERSION :=
+#ifneq ($(filter 64-Bit, $(shell $(JAVA) -version 2>&1)),)
+#HOST_JDK_IS_64BIT_VERSION := true
+#endif
 endif  # CALLED_FROM_SETUP not true
 
 # It's called md5 on Mac OS and md5sum on Linux
@@ -734,7 +734,7 @@ endif
 APICHECK_CLASSPATH_ENTRIES := \
     $(HOST_OUT_JAVA_LIBRARIES)/doclava$(COMMON_JAVA_PACKAGE_SUFFIX) \
     $(HOST_OUT_JAVA_LIBRARIES)/jsilver$(COMMON_JAVA_PACKAGE_SUFFIX) \
-    $(HOST_JDK_TOOLS_JAR) \
+#    $(HOST_JDK_TOOLS_JAR) \
     )
 APICHECK_CLASSPATH := $(subst $(space),:,$(strip $(APICHECK_CLASSPATH_ENTRIES)))
 

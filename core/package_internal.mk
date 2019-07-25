@@ -340,7 +340,7 @@ include $(BUILD_SYSTEM)/android_manifest.mk
 
 called_from_package_internal := true
 #################################
-include $(BUILD_SYSTEM)/java.mk
+#include $(BUILD_SYSTEM)/java.mk
 #################################
 called_from_package_internal :=
 

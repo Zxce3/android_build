@@ -172,7 +172,7 @@ OPTIONS.worker_threads = multiprocessing.cpu_count() // 2
 if OPTIONS.worker_threads == 0:
   OPTIONS.worker_threads = 1
 OPTIONS.two_step = False
-OPTIONS.no_signing = False
+OPTIONS.no_signing = True
 OPTIONS.block_based = True
 OPTIONS.updater_binary = None
 OPTIONS.oem_source = None
