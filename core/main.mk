@@ -595,6 +595,7 @@ subdirs := \
 	frameworks/av/services/audiopolicy \
 	frameworks/av/services/medialog \
 	frameworks/av/services/mediacodec \
+	frameworks/av/services/mediaextractor \
 	frameworks/av/services/mediaresourcemanager \
 	frameworks/av/services/camera/libcameraservice \
 	frameworks/av/soundtrigger \

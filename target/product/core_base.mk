@@ -70,7 +70,7 @@ PRODUCT_PACKAGES += \
     healthd \
     logd
 
-# for Ubuntu Touch (hybris, platform-api, utils, etc)
+# for Halium (hybris, platform-api, utils, etc)
 PRODUCT_PACKAGES += \
     apns-conf.xml \
     libcamera_compat_layer \
@@ -80,7 +80,9 @@ PRODUCT_PACKAGES += \
     libsf_compat_layer \
     libui_compat_layer \
     libubuntu_application_api \
-    upstart-property-watcher
+    upstart-property-watcher \
+    libdroidmedia \
+    miniafservice
 
 # for testing
 PRODUCT_PACKAGES += \
