@@ -375,11 +375,15 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
   """
 
   def make_ramdisk(compressor):
-    ramdisk_img = tempfile.NamedTemporaryFile()
+    # prefer the pre-built ramdisk, otherwise build a new from RAMDISK
+    if os.access(os.path.join(sourcedir, "ramdisk.img"), os.F_OK):
+      ramdisk = os.path.join(sourcedir, "ramdisk.img")
+    else:
+      ramdisk_img = tempfile.NamedTemporaryFile()
+      ramdisk = ramdisk_img.name
 
     if os.access(fs_config_file, os.F_OK):
-      cmd = ["mkbootfs", "-f", fs_config_file,
-             os.path.join(sourcedir, "RAMDISK")]
+      cmd = ["mkbootfs", "-f", fs_config_file, os.path.join(sourcedir, "RAMDISK")]
     else:
       cmd = ["mkbootfs", os.path.join(sourcedir, "RAMDISK")]
     p1 = Run(cmd, stdout=subprocess.PIPE)
@@ -389,10 +393,14 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     p1.wait()
     assert p1.returncode == 0, "mkbootfs of %s ramdisk failed" % (sourcedir,)
     assert p2.returncode == 0, compressor + " of %s ramdisk failed" % (sourcedir,)
+    ramdisk_img.close()
 
     return ramdisk_img
 
   if not os.access(os.path.join(sourcedir, "kernel"), os.F_OK):
+    return None
+
+  if has_ramdisk and not os.access(os.path.join(sourcedir, "ramdisk.img"), os.F_OK):
     return None
 
   if has_ramdisk and not os.access(os.path.join(sourcedir, "RAMDISK"), os.F_OK):
@@ -455,7 +463,7 @@ def _BuildBootableImage(sourcedir, fs_config_file, info_dict=None,
     cmd.extend(shlex.split(args))
 
   if has_ramdisk:
-    cmd.extend(["--ramdisk", ramdisk_img.name])
+    cmd.extend(["--ramdisk", ramdisk])
 
   img_unsigned = None
   if info_dict.get("vboot", None):
