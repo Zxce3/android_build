@@ -30,6 +30,8 @@ PRODUCT_PACKAGES += \
     cmd \
     crash_dump \
     debuggerd\
+    droidmedia \
+    audioflingerglue \
     dumpstate \
     dumpsys \
     fastboot \
@@ -50,15 +52,26 @@ PRODUCT_PACKAGES += \
     libc_malloc_debug \
     libcutils \
     libdl \
+    libEGL \
+    libGLESv1_CM \
+    libGLESv2 \
     libgui \
     libhardware \
     libhardware_legacy \
+    libhwc2_compat_layer \
+    linker_32 \
+    libc_32 \
+    libEGL_32 \
+    libGLESv1_CM_32 \
+    libGLESv2_32 \
+    libhwc2_compat_layer_32 \
     libjpeg \
     liblog \
     libm \
     libpixelflinger \
     libpower \
-    libsigchain \
+    librmnetctl \
+    libselinux_stubs \
     libstdc++ \
     libsurfaceflinger \
     libsurfaceflinger_ddmconnection \
