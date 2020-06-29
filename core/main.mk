@@ -486,6 +486,7 @@ subdirs := \
 	development/tools/emulator/opengl \
 	external/aac \
 	external/boringssl \
+	external/bsdiff \
 	external/bson \
 	external/busybox \
 	external/bzip2 \
@@ -505,6 +506,7 @@ subdirs := \
 	external/gcc-demangle \
 	external/genext2fs \
 	external/giflib \
+	external/gmock \
 	external/gtest \
 	external/gptfdisk \
 	external/ntfs-3g \
@@ -515,6 +517,7 @@ subdirs := \
 	external/iproute2 \
 	external/iptables \
 	external/nanopb-c \
+	external/libdivsufsort \
 	external/libpcap \
 	external/libcap \
 	external/jemalloc \
