@@ -509,6 +509,7 @@ subdirs := \
 	external/gmock \
 	external/gtest \
 	external/gptfdisk \
+	external/harfbuzz_ng \
 	external/ntfs-3g \
 	external/piex \
 	external/f2fs-tools \
@@ -571,6 +572,7 @@ subdirs := \
 	external/tinycompress \
 	external/tinyalsa \
 	external/tremolo \
+	external/unicode \
 	external/webp \
 	external/webrtc \
 	external/wpa_supplicant_6 \
@@ -610,6 +612,7 @@ subdirs := \
 	frameworks/base/libs/storage \
 	frameworks/base/tools/aapt \
 	frameworks/base/native/android \
+	frameworks/minikin \
 	frameworks/native/cmds/installd \
 	frameworks/native/cmds/sensorservice \
 	frameworks/native/cmds/servicemanager \
