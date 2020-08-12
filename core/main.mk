@@ -571,6 +571,7 @@ subdirs := \
 	external/stlport \
 	external/tinycompress \
 	external/tinyalsa \
+	external/tinyxml \
 	external/tremolo \
 	external/unicode \
 	external/webp \
